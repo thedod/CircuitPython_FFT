@@ -25,11 +25,10 @@
 
 CircuitPython FFT Library
 
-
 * Author(s): Tom Schucker
 
 Implementation Notes
---------------------
+---------------------
 
 **Hardware:**
 
@@ -42,7 +41,6 @@ Implementation Notes
 
 # imports
 from math import pi, sin, cos, sqrt, pow, log
-from adafruit_itertools import islice, count
 import array
 
 __version__ = "0.0.0-auto.0"
@@ -52,8 +50,8 @@ __repo__ = "https://github.com/tschucker/Teaandtechtime_CircuitPython_FFT.git"
 def fft(x):
     N = len(x)
     if N <= 1: return x
-    even = fft(list(islice(x,0,N,2)))
-    odd =  fft(list(islice(x,1,N,2)))
+    even = fft([x[i] for i in range(0, N, 2)])
+    odd =  fft([x[i] for i in range(1, N, 2)])
     T = [cos(2*pi*k/N)*odd[k].real+sin(2*pi*k/N)*odd[k].imag + (cos(2*pi*k/N)*odd[k].imag-sin(2*pi*k/N)*odd[k].real)*1j for k in range(N//2)]
     return [even[k].real + T[k].real + (even[k].imag + T[k].imag)*1j for k in range(N//2)] + \
            [even[k].real - T[k].real + (even[k].imag - T[k].imag)*1j for k in range(N//2)]
@@ -82,4 +80,5 @@ def spectrogram(x):
         else:
             temp_list.append(0)
     return temp_list
+
 
